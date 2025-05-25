@@ -1,3 +1,56 @@
+/*Logo Carousel Section*/
+document.addEventListener("DOMContentLoaded", function () {
+  const tooltipElements = document.querySelectorAll("[data-tooltip]");
+  tooltipElements.forEach((element) => {
+    let tooltip = null;
+    let timeout;
+    element.addEventListener("mouseenter", function () {
+      tooltip = document.createElement("div");
+      tooltip.className = "custom-tooltip";
+      tooltip.textContent = this.getAttribute("data-tooltip");
+      const rect = this.getBoundingClientRect();
+      tooltip.style.position = "absolute";
+      tooltip.style.left = `${rect.left + window.scrollX + rect.width / 2}px`;
+      tooltip.style.top = `${rect.top + window.scrollY - 40}px`;
+      tooltip.style.transform = "translateX(-50%)";
+      document.body.appendChild(tooltip);
+      tooltip.style.opacity = "0";
+      timeout = setTimeout(() => {
+        tooltip.style.opacity = "1";
+        tooltip.style.transition = "opacity 0.2s ease";
+      }, 100);
+    });
+    element.addEventListener("mouseleave", function () {
+      if (tooltip) {
+        tooltip.style.opacity = "0";
+        setTimeout(() => {
+          if (tooltip && tooltip.parentNode) {
+            tooltip.parentNode.removeChild(tooltip);
+          }
+        }, 200);
+      }
+      clearTimeout(timeout);
+    });
+  });
+  const track = document.querySelector(".carousel-track");
+  if (track) {
+    track.addEventListener("mouseenter", () => {
+      track.style.animationPlayState = "paused";
+    });
+    track.addEventListener("mouseleave", () => {
+      track.style.animationPlayState = "running";
+    });
+    const slides = document.querySelectorAll(".carousel-slide");
+    if (slides.length > 0) {
+      slides.forEach((slide) => {
+        const clone = slide.cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        track.appendChild(clone);
+      });
+    }
+  }
+});
+
 /*Menu Highlighter*/
 window.addEventListener("scroll", function () {
   const scrollPosition = window.scrollY;
