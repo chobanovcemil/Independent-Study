@@ -1,2 +1,1 @@
-Çobanov Cəmil
-Huseynova Nursen
+
